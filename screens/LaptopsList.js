@@ -1,10 +1,10 @@
-import { Button, ListItem } from "@rneui/base";
+import { Button, FAB, ListItem } from "@rneui/base";
 import { StatusBar } from "expo-status-bar";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { getAllLaptops } from "../rest_client/laptop";
 import { useState } from "react";
 
-export const LaptopsList = () => {
+export const LaptopsList = ({ navigation }) => {
   const [laptopsList, setLaptopsList] = useState();
   fnRefreshList = (list) => {
     setLaptopsList(list);
@@ -36,6 +36,12 @@ export const LaptopsList = () => {
           return <LaptopItem Laptop={item} />;
         }}
       />
+      <FAB
+        title="+"
+        onPress={() => {
+          navigation.navigate("LaptopsFormNav");
+        }}
+      />
     </View>
   );
 };
@@ -44,5 +50,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    paddingVertical: 30,
   },
 });
