@@ -53,3 +53,14 @@ export const updatelaptopRest = (laptop, fnShowMessage) => {
       console.log(body);
     });
 };
+export const deleteLaptopRest = (laptop, fnShowMessage) => {
+  const config = {
+    method: "DELETE",
+  };
+  fetch(url + "laptops/" + laptop.id, config)
+    .then((response) => response.json())
+    .then((body) => {
+      fnShowMessage();
+      console.log(body);
+    });
+};

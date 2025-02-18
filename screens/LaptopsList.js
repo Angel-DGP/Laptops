@@ -8,13 +8,16 @@ import {
   TouchableHighlight,
 } from "react-native";
 import { getAllLaptops } from "../rest_client/laptop";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const LaptopsList = ({ navigation }) => {
   const [laptopsList, setLaptopsList] = useState();
   fnRefreshList = (list) => {
     setLaptopsList(list);
   };
+  useEffect(() => {
+    getAllLaptops(fnRefreshList);
+  }, []);
   const LaptopItem = ({ Laptop }) => {
     return (
       <TouchableHighlight
@@ -38,12 +41,6 @@ export const LaptopsList = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text>LISTA DE LAPTOPS</Text>
-      <Button
-        title="Consultar"
-        onPress={() => {
-          getAllLaptops(fnRefreshList);
-        }}
-      />
       <FlatList
         data={laptopsList}
         renderItem={({ item }) => {

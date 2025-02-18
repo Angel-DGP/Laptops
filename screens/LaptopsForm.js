@@ -1,7 +1,11 @@
 import { Button, Input } from "@rneui/base";
 import { useState } from "react";
 import { View, Text, StyleSheet, FlatList, Alert } from "react-native";
-import { saveLaptopRest, updatelaptopRest } from "../rest_client/laptop";
+import {
+  deleteLaptopRest,
+  saveLaptopRest,
+  updatelaptopRest,
+} from "../rest_client/laptop";
 export const LaptopsForm = ({ navigation, route }) => {
   let laptopRecived = route.params.laptopParam;
   let isNew = true;
@@ -16,11 +20,8 @@ export const LaptopsForm = ({ navigation, route }) => {
   const [memoria, setMemoria] = useState(isNew ? null : laptopRecived.memoria);
   const [disco, setDisco] = useState(isNew ? null : laptopRecived.disco);
 
-  const showMessage = () => {
-    Alert.alert(
-      "CONFIRMACIÓN",
-      isNew ? "Se creo la laptop" : "Laptop actualizado"
-    );
+  const showMessage = (message) => {
+    Alert.alert("CONFIRMACIÓN", message);
     navigation.goBack();
   };
   const saveLaptop = () => {
@@ -32,7 +33,7 @@ export const LaptopsForm = ({ navigation, route }) => {
         memoria: memoria,
         disco: disco,
       },
-      showMessage()
+      showMessage("Se ha creado una laptop")
     );
   };
   const updateLaptop = () => {
@@ -45,10 +46,27 @@ export const LaptopsForm = ({ navigation, route }) => {
         memoria: memoria,
         disco: disco,
       },
-      showMessage
+      showMessage("Se ha actualizado una laptop")
     );
   };
-
+  const confirmDelete = () => {
+    Alert.alert("ATENCIÓN", "¿Deseas eliminar este contacto?", [
+      {
+        text: "Si",
+        onPress: deleteLaptop,
+      },
+      {
+        text: "Cancelar",
+      },
+    ]);
+  };
+  const deleteLaptop = () => {
+    console.log("laptop elimnado");
+    deleteLaptopRest(
+      { id: laptopRecived.id },
+      showMessage("Se ha eliminado la laptop")
+    );
+  };
   return (
     <View style={styles.container}>
       <Text>FORMULARIO CONTACTOS</Text>
@@ -80,7 +98,17 @@ export const LaptopsForm = ({ navigation, route }) => {
           setDisco(value);
         }}
       />
-      <Button title="Save" onPress={saveLaptop} />
+      <Button title="Save" onPress={isNew ? saveLaptop : updateLaptop} />
+      {isNew ? (
+        <View></View>
+      ) : (
+        <Button
+          title="Eliminar"
+          onPress={() => {
+            confirmDelete();
+          }}
+        ></Button>
+      )}
     </View>
   );
 };
