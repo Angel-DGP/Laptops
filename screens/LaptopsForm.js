@@ -1,16 +1,27 @@
 import { Button, Input } from "@rneui/base";
 import { useState } from "react";
 import { View, Text, StyleSheet, FlatList, Alert } from "react-native";
-import { saveLaptopRest } from "../rest_client/laptop";
-export const LaptopsForm = ({ navigation }) => {
-  const [id, setId] = useState();
-  const [marca, setMarca] = useState();
-  const [procesador, setProcesador] = useState();
-  const [memoria, setMemoria] = useState();
-  const [disco, setDisco] = useState();
+import { saveLaptopRest, updatelaptopRest } from "../rest_client/laptop";
+export const LaptopsForm = ({ navigation, route }) => {
+  let laptopRecived = route.params.laptopParam;
+  let isNew = true;
+  if (laptopRecived != null) {
+    isNew = false;
+    console.log(laptopRecived);
+  }
+  const [marca, setMarca] = useState(isNew ? null : laptopRecived.marca);
+  const [procesador, setProcesador] = useState(
+    isNew ? null : laptopRecived.procesador
+  );
+  const [memoria, setMemoria] = useState(isNew ? null : laptopRecived.memoria);
+  const [disco, setDisco] = useState(isNew ? null : laptopRecived.disco);
 
   const showMessage = () => {
-    Alert.alert("CONFIRMACIÓN", "Se creo la laptop");
+    Alert.alert(
+      "CONFIRMACIÓN",
+      isNew ? "Se creo la laptop" : "Laptop actualizado"
+    );
+    navigation.goBack();
   };
   const saveLaptop = () => {
     console.log("saveLaptop");
@@ -23,7 +34,19 @@ export const LaptopsForm = ({ navigation }) => {
       },
       showMessage()
     );
-    navigation.goBack();
+  };
+  const updateLaptop = () => {
+    console.log("updateLaptop");
+    updatelaptopRest(
+      {
+        id: laptopRecived.id,
+        marca: marca,
+        procesador: procesador,
+        memoria: memoria,
+        disco: disco,
+      },
+      showMessage
+    );
   };
 
   return (

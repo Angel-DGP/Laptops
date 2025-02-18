@@ -1,4 +1,4 @@
-const ip = "192.168.1.9";
+const ip = "192.168.1.8";
 const port = 3002;
 const url = "http://" + ip + ":" + port + "/";
 export const getAllLaptops = (fnRefreshList) => {
@@ -30,5 +30,26 @@ export const saveLaptopRest = (laptop, fnShowMessage) => {
     .then((body) => {
       console.log(body);
       fnShowMessage();
+    });
+};
+export const updatelaptopRest = (laptop, fnShowMessage) => {
+  const config = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id: laptop.id,
+      marca: laptop.marca,
+      procesador: laptop.procesador,
+      memoria: laptop.memoria,
+      disco: laptop.disco,
+    }),
+  };
+  fetch(url + "laptops/" + laptop.id, config)
+    .then((response) => response.json())
+    .then((body) => {
+      fnShowMessage();
+      console.log(body);
     });
 };

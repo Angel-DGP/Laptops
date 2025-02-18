@@ -1,6 +1,12 @@
 import { Button, FAB, ListItem } from "@rneui/base";
 import { StatusBar } from "expo-status-bar";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight,
+} from "react-native";
 import { getAllLaptops } from "../rest_client/laptop";
 import { useState } from "react";
 
@@ -11,14 +17,22 @@ export const LaptopsList = ({ navigation }) => {
   };
   const LaptopItem = ({ Laptop }) => {
     return (
-      <ListItem>
-        <ListItem.Content>
-          <ListItem.Title>
-            {Laptop.marca} {Laptop.procesador}
-          </ListItem.Title>
-          <ListItem.Subtitle>{Laptop.id}</ListItem.Subtitle>
-        </ListItem.Content>
-      </ListItem>
+      <TouchableHighlight
+        onPress={() => {
+          navigation.navigate("LaptopsFormNav", {
+            laptopParam: Laptop,
+          });
+        }}
+      >
+        <ListItem>
+          <ListItem.Content>
+            <ListItem.Title>
+              {Laptop.marca} {Laptop.procesador}
+            </ListItem.Title>
+            <ListItem.Subtitle>{Laptop.id}</ListItem.Subtitle>
+          </ListItem.Content>
+        </ListItem>
+      </TouchableHighlight>
     );
   };
   return (
@@ -39,7 +53,7 @@ export const LaptopsList = ({ navigation }) => {
       <FAB
         title="+"
         onPress={() => {
-          navigation.navigate("LaptopsFormNav");
+          navigation.navigate("LaptopsFormNav", {});
         }}
       />
     </View>
